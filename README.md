@@ -1,3 +1,8 @@
+# deb file translated to english in release folder
+
+
+
+
 # iPhone-VCAM
 
 基于 *Cydia Substrate* 的虚拟摄像头
