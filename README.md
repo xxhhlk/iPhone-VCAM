@@ -1,5 +1,4 @@
-# deb file translated to english in release folder
-
+# A deb file (version 0.0.1-8debug) has been translated into English and placed in the release folder by qrld23.
 
 
 

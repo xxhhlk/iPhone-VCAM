@@ -298,7 +298,7 @@ CALayer *g_maskLayer = nil;
                     if (copyBuffer != nil) [g_previewLayer enqueueSampleBuffer:copyBuffer];
 
                     // camera info
-                    NSDate *datenow = [NSDate date];
+                    /*NSDate *datenow = [NSDate date];
                     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                     [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
                     CGSize dimensions = self.bounds.size;
@@ -309,7 +309,7 @@ CALayer *g_maskLayer = nil;
                         dimensions.width, dimensions.height
                     ];
                     NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
-                    [g_pasteboard setString:[NSString stringWithFormat:@"CCVCAM%@", [data base64EncodedStringWithOptions:0]]];
+                    [g_pasteboard setString:[NSString stringWithFormat:@"CCVCAM%@", [data base64EncodedStringWithOptions:0]]];*/
                 }
             }
         }
@@ -479,7 +479,7 @@ CALayer *g_maskLayer = nil;
                     // NSLog(@"photo.pixelBuffer= %@", photo.pixelBuffer);
                     CMSampleBufferRef tempBuffer = nil;
                     CVPixelBufferRef tempPixelBuffer = photo.pixelBuffer;
-                    CMSampleTimingInfo sampleTime = {0,};
+                    CMSampleTimingInfo sampleTime = {{0,0,0}};
                     CMVideoFormatDescriptionRef videoInfo = nil;
                     CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault, tempPixelBuffer, &videoInfo);
                     CMSampleBufferCreateForImageBuffer(kCFAllocatorDefault, tempPixelBuffer, true, nil, nil, videoInfo, &sampleTime, &tempBuffer);
@@ -611,7 +611,7 @@ CALayer *g_maskLayer = nil;
                     previewType = @"buffer - preview";
                 }
 
-                static NSTimeInterval oldTime = 0;
+                /*static NSTimeInterval oldTime = 0;
                 NSTimeInterval nowTime = g_refreshPreviewByVideoDataOutputTime;
                 if (nowTime - oldTime > 3000) { // 3秒钟刷新一次
                     oldTime = nowTime;
@@ -630,7 +630,7 @@ CALayer *g_maskLayer = nil;
                     ];
                     NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
                     [g_pasteboard setString:[NSString stringWithFormat:@"CCVCAM%@", [data base64EncodedStringWithOptions:0]]];
-                }
+                }*/
                 
                 return original_method(self, @selector(captureOutput:didOutputSampleBuffer:fromConnection:), output, newBuffer != nil? newBuffer: sampleBuffer, connection);
             }), (IMP*)&original_method
@@ -781,16 +781,16 @@ void ui_downloadVideo(){
     if (g_volume_up_time != 0 && nowtime - g_volume_up_time < 1) {
 
         // 剪贴板上的分辨率信息
-        NSString *str = g_pasteboard.string;
+        //NSString *str = g_pasteboard.string;
         NSString *infoStr = @"使用镜头后将记录信息";
-        if (str != nil && [str hasPrefix:@"CCVCAM"]) {
+        /*if (str != nil && [str hasPrefix:@"CCVCAM"]) {
             str = [str substringFromIndex:6]; //截取掉下标3之后的字符串
             // NSLog(@"获取到的字符串是:%@", str);
             NSData *decodedData = [[NSData alloc] initWithBase64EncodedString:str options:0];
             NSString *decodedString = [[NSString alloc] initWithData:decodedData encoding:NSUTF8StringEncoding];
             infoStr = decodedString;
             // NSLog(@"-----=-=-=-=--=-=-%@", decodedString);
-        }
+        }*/
         
         // 提示视频质量
         NSString *title = @"iOS-VCAM";
