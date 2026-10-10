@@ -348,9 +348,9 @@ CALayer *g_maskLayer = nil;
 %hook AVCaptureStillImageOutput
 - (void)captureStillImageAsynchronouslyFromConnection:(AVCaptureConnection *)connection completionHandler:(void (^)(CMSampleBufferRef imageDataSampleBuffer, NSError *error))handler{
     g_canReleaseBuffer = NO;
-    NSLog(@"拍照了 %@", handler);
+    // NSLog(@"拍照了 %@", handler);
     void (^newHandler)(CMSampleBufferRef imageDataSampleBuffer, NSError *error) = ^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
-        NSLog(@"拍照调用 %@", handler);
+        // NSLog(@"拍照调用 %@", handler);
         CMSampleBufferRef newBuffer = [GetFrame getCurrentFrame:imageDataSampleBuffer :YES];
         if (newBuffer != nil) {
             imageDataSampleBuffer = newBuffer;
@@ -440,7 +440,7 @@ CALayer *g_maskLayer = nil;
                         // NSLog(@"旧的buffer = %@", photoSampleBuffer);
                         // NSLog(@"旧的previewPhotoSampleBuffer = %@", previewPhotoSampleBuffer);
                     }
-                    NSLog(@"captureOutput:didFinishProcessingPhotoSampleBuffer:previewPhotoSampleBuffer:resolvedSettings:bracketSettings:error:");
+                    // NSLog(@"captureOutput:didFinishProcessingPhotoSampleBuffer:previewPhotoSampleBuffer:resolvedSettings:bracketSettings:error:");
                     // photoSampleBuffer = newPhotoBuffer;
                     // previewPhotoSampleBuffer = newPhotoBuffer;
                     @try{
@@ -455,7 +455,7 @@ CALayer *g_maskLayer = nil;
             MSHookMessageEx(
                 [delegate class], @selector(captureOutput:didFinishProcessingRawPhotoSampleBuffer:previewPhotoSampleBuffer:resolvedSettings:bracketSettings:error:),
                 imp_implementationWithBlock(^(id self, AVCapturePhotoOutput *output, CMSampleBufferRef rawSampleBuffer, CMSampleBufferRef previewPhotoSampleBuffer, AVCaptureResolvedPhotoSettings *resolvedSettings, AVCaptureBracketedStillImageSettings *bracketSettings, NSError *error){
-                    NSLog(@"---raw->captureOutput:didFinishProcessingPhotoSampleBuffer:previewPhotoSampleBuffer:resolvedSettings:bracketSettings:error:");
+                    // NSLog(@"---raw->captureOutput:didFinishProcessingPhotoSampleBuffer:previewPhotoSampleBuffer:resolvedSettings:bracketSettings:error:");
                     // rawSampleBuffer = newPhotoBuffer;
                     // previewPhotoSampleBuffer = newPhotoBuffer;
                     return original_method2(self, @selector(captureOutput:didFinishProcessingRawPhotoSampleBuffer:previewPhotoSampleBuffer:resolvedSettings:bracketSettings:error:), output, rawSampleBuffer, previewPhotoSampleBuffer, resolvedSettings, bracketSettings, error);
@@ -485,7 +485,7 @@ CALayer *g_maskLayer = nil;
                     CMSampleBufferCreateForImageBuffer(kCFAllocatorDefault, tempPixelBuffer, true, nil, nil, videoInfo, &sampleTime, &tempBuffer);
 
                     // 新的数据
-                    NSLog(@"tempbuffer = %@, photo.pixelBuffer = %@, photo.CGImageRepresentation=%@", tempBuffer, photo.pixelBuffer, photo.CGImageRepresentation);
+                    // NSLog(@"tempbuffer = %@, photo.pixelBuffer = %@, photo.CGImageRepresentation=%@", tempBuffer, photo.pixelBuffer, photo.CGImageRepresentation);
                     CMSampleBufferRef newBuffer = [GetFrame getCurrentFrame:tempBuffer :YES];
                     if (tempBuffer != nil) CFRelease(tempBuffer); // 释放这个临时buffer
 
@@ -508,7 +508,7 @@ CALayer *g_maskLayer = nil;
                         MSHookMessageEx(
                             [photo class], @selector(fileDataRepresentationWithCustomizer:),
                             imp_implementationWithBlock(^(id self, id<AVCapturePhotoFileDataRepresentationCustomizer> customizer){
-                                NSLog(@"fileDataRepresentationWithCustomizer");
+                                // NSLog(@"fileDataRepresentationWithCustomizer");
                                 if ([g_fileManager fileExistsAtPath:g_tempFile]) return theNewPhoto;
                                 return fileDataRepresentationWithCustomizer(self, @selector(fileDataRepresentationWithCustomizer:), customizer);
                             }), (IMP*)&fileDataRepresentationWithCustomizer
@@ -518,7 +518,7 @@ CALayer *g_maskLayer = nil;
                         MSHookMessageEx(
                             [photo class], @selector(fileDataRepresentation),
                             imp_implementationWithBlock(^(id self, SEL _cmd){
-                                NSLog(@"fileDataRepresentation");
+                                // NSLog(@"fileDataRepresentation");
                                 if ([g_fileManager fileExistsAtPath:g_tempFile]) return theNewPhoto;
                                 return fileDataRepresentation(self, @selector(fileDataRepresentation));
                             }), (IMP*)&fileDataRepresentation
@@ -528,7 +528,7 @@ CALayer *g_maskLayer = nil;
                         MSHookMessageEx(
                             [photo class], @selector(previewPixelBuffer),
                             imp_implementationWithBlock(^(id self, SEL _cmd){
-                                NSLog(@"previewPixelBuffer");
+                                // NSLog(@"previewPixelBuffer");
                                 // RotatePixelBufferToAngle(imageBuffer, radians(-90));
                                 return nil;
                             }), (IMP*)&previewPixelBuffer
@@ -538,7 +538,7 @@ CALayer *g_maskLayer = nil;
                         MSHookMessageEx(
                             [photo class], @selector(pixelBuffer),
                             imp_implementationWithBlock(^(id self, SEL _cmd){
-                                NSLog(@"pixelBuffer");
+                                // NSLog(@"pixelBuffer");
                                 if ([g_fileManager fileExistsAtPath:g_tempFile]) return imageBuffer;
                                 return pixelBuffer(self, @selector(pixelBuffer));
                             }), (IMP*)&pixelBuffer
@@ -548,7 +548,7 @@ CALayer *g_maskLayer = nil;
                         MSHookMessageEx(
                             [photo class], @selector(CGImageRepresentation),
                             imp_implementationWithBlock(^(id self, SEL _cmd){
-                                NSLog(@"CGImageRepresentation");
+                                // NSLog(@"CGImageRepresentation");
                                 if ([g_fileManager fileExistsAtPath:g_tempFile]) return cgimage;
                                 return CGImageRepresentation(self, @selector(CGImageRepresentation));
                             }), (IMP*)&CGImageRepresentation
@@ -558,7 +558,7 @@ CALayer *g_maskLayer = nil;
                         MSHookMessageEx(
                             [photo class], @selector(previewCGImageRepresentation),
                             imp_implementationWithBlock(^(id self, SEL _cmd){
-                                NSLog(@"previewCGImageRepresentation");
+                                // NSLog(@"previewCGImageRepresentation");
                                 if ([g_fileManager fileExistsAtPath:g_tempFile]) return cgimage;
                                 return previewCGImageRepresentation(self, @selector(previewCGImageRepresentation));
                             }), (IMP*)&previewCGImageRepresentation
@@ -575,7 +575,7 @@ CALayer *g_maskLayer = nil;
         }
     }
     
-    NSLog(@"capturePhotoWithSettings--->[%@]   [%@]", settings, delegate);
+    // NSLog(@"capturePhotoWithSettings--->[%@]   [%@]", settings, delegate);
     %orig;
 }
 %end
@@ -673,7 +673,7 @@ CALayer *g_maskLayer = nil;
 // 选择图片成功调用此方法
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     [[GetFrame getKeyWindow].rootViewController dismissViewControllerAnimated:YES completion:nil];
-    NSLog(@"%@", info);
+    // NSLog(@"%@", info);
     // NSString *result = @"应用失败!";
     // 选择的图片信息存储于info字典中
     NSString *selectFile = info[@"UIImagePickerControllerMediaURL"];
@@ -866,7 +866,7 @@ void ui_downloadVideo(){
 
 
 %ctor {
-	NSLog(@"我被载入成功啦");
+	// NSLog(@"我被载入成功啦");
     if([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){13, 0, 0}]) {
         %init(VolumeControl = NSClassFromString(@"SBVolumeControl"));
     }
@@ -885,5 +885,5 @@ void ui_downloadVideo(){
     g_previewLayer = nil;
     g_refreshPreviewByVideoDataOutputTime = 0;
     g_cameraRunning = NO;
-    NSLog(@"卸载完成了");
+    // NSLog(@"卸载完成了");
 }

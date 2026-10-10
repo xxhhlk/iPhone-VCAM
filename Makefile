@@ -10,5 +10,6 @@ TWEAK_NAME = TTtest
 
 TTtest_FILES = Tweak.x
 TTtest_CFLAGS = -fobjc-arc
+TTtest_FRAMEWORKS = Foundation UIKit AVFoundation CoreMedia CoreVideo CoreImage QuartzCore CoreGraphics
 
 include $(THEOS_MAKE_PATH)/tweak.mk
